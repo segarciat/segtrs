@@ -4,5 +4,7 @@ version = "0.1.0"
 edition = "2024"
 description = "Miscellaneous functions such as numeric sequences and factorization."
 license = "MPL-2.0"
+repository = "https://github.com/segarciat/segtrs"
+readme = "./README.adoc"
 
 [dependencies]
