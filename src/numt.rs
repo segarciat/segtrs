@@ -1,6 +1,7 @@
 use std::error::Error;
 use std::collections::BTreeSet;
 
+
 /// Determines whether `n` is prime.
 ///
 /// # Examples

@@ -6,3 +6,6 @@
 //! a simple crate, while sharing my code with others.
 
 pub mod numt;
+pub mod bigint;
+
+pub use bigint::BigInt;
