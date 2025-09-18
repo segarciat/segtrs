@@ -7,5 +7,7 @@
 
 pub mod numt;
 pub mod bigint;
+pub mod fib;
 
 pub use bigint::BigInt;
+pub use fib::FibonacciIterator;
