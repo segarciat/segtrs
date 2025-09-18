@@ -30,6 +30,51 @@ pub fn is_prime(n: u64) -> bool {
 	true
 }
 
+/// Computes the greatest common divisor of `p` and `q`.
+///
+/// # Examples
+///
+/// ```
+/// use segtrs::numt;
+/// assert_eq!(0, numt::gcd(0, 0));
+/// assert_eq!(18, numt::gcd(0, 18));
+/// assert_eq!(18, numt::gcd(18, 0));
+/// assert_eq!(6, numt::gcd(18, 48));
+/// ```
+
+pub fn gcd(mut p: u64, mut q: u64) -> u64 {
+	while q != 0 {
+		let r = p % q;
+		p = q;
+		q = r;
+	}
+
+	return p;
+}
+
+/// Computes the least common multiple of `p` and `q`.
+///
+/// # Examples
+///
+/// ```
+/// use segtrs::numt;
+/// assert_eq!(0, numt::lcm(0, 0).unwrap());
+/// assert_eq!(0, numt::lcm(0, 12).unwrap());
+/// assert_eq!(0, numt::lcm(12, 0).unwrap());
+/// assert_eq!(36, numt::lcm(12, 18).unwrap());
+/// assert!(numt::lcm(u64::MAX, u64::MAX - 1).is_err());
+/// ```
+pub fn lcm(p: u64, q: u64) -> Result<u64, Box<dyn Error>> {
+	let result = if p == 0 && q == 0 {
+		0
+	} else {
+		let pq = p.checked_mul(q).ok_or_else(|| "overflow")?;
+		pq / gcd(p, q)
+	};
+
+	Ok(result)
+}
+
 /// Computes the $n$th triangular number according to the formula
 /// $t_n = \frac{n(n+1)}{2}. On overflow, returns an error.
 ///
