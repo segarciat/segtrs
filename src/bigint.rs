@@ -84,6 +84,40 @@ impl BigInt {
 			digits: result,
 		}
 	}
+
+	pub fn multiply(&self, other: &BigInt) -> Self {
+		let mut products = vec![];
+
+		for (num_zeros, a) in self.digits().iter().enumerate() {
+			let mut single_digit_product = vec![];
+			for _ in 0..num_zeros {
+				single_digit_product.push(0);
+			}
+
+			// Multiply a by every digit of other
+			let mut carry = 0;
+			for b in &other.digits {
+				let p = a * b + carry;
+				single_digit_product.push(p % 10);
+				carry = p / 10;
+			}
+
+			// Exhaust the carry that remais, if any
+			while carry != 0 {
+				single_digit_product.push(carry % 10);
+				carry /= 10;
+			}
+			products.push(single_digit_product);
+		}
+		// Add all the products
+		let mut result = BigInt::new(vec![].into_iter());
+		for product in products.into_iter() {
+			let bigint = BigInt::new(product.into_iter());
+			result = result.add(&bigint);
+		}
+
+		result
+	}
 }
 
 #[cfg(test)]
@@ -116,5 +150,24 @@ mod tests {
 		let sum = a.add(&b);
 
 		assert_eq!(&vec![3, 2, 1], sum.digits());
+	}
+
+	#[test]
+	fn bigint_multiply_single_digit() {
+		let a = BigInt::new(vec![3].into_iter());
+		let b = BigInt::new(vec![2].into_iter());
+		let product = a.multiply(&b);
+
+		assert_eq!(&vec![6], product.digits());
+	}
+
+	#[test]
+	fn bigint_multiply_multi_digit() {
+		// 12 multiplied by 345 is 4140
+		let a = BigInt::new(vec![2, 1].into_iter());
+		let b = BigInt::new(vec![5, 4, 3].into_iter());
+		let product = a.multiply(&b);
+
+		assert_eq!(&vec![0, 4, 1, 4], product.digits());
 	}
 }
