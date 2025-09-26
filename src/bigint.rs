@@ -36,6 +36,25 @@ impl BigInt {
 		}
 	}
 
+	pub fn from_int(n: u64) -> Self {
+		let mut digits: Vec<u8> = vec![];
+
+		let mut k = n;
+		loop {
+			let digit = k % 10;
+			digits.push(digit as u8);
+			k = k / 10;
+
+			if k == 0 {
+				break;
+			}
+		};
+
+		BigInt {
+			digits: digits,
+		}
+	}
+
 	/// Obtain a references to the digits stored by the BigInt object.
 	pub fn digits(&self) -> &Vec<u8> {
 		&self.digits
@@ -169,5 +188,17 @@ mod tests {
 		let product = a.multiply(&b);
 
 		assert_eq!(&vec![0, 4, 1, 4], product.digits());
+	}
+
+	#[test]
+	fn bigint_from_integer_zero() {
+		let bigint = BigInt::from_int(0);
+		assert_eq!(&vec![0], bigint.digits());
+	}
+
+	#[test]
+	fn bigint_from_int() {
+		let bigint = BigInt::from_int(12345);
+		assert_eq!(&vec![5, 4, 3, 2, 1], bigint.digits());
 	}
 }
